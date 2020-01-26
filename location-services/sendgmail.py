@@ -10,10 +10,10 @@ class sendingEmail:
         self.sendTheMessage()
     
     def sendTheMessage(self):
-        context = ssl.create_default_context()
-        with smtplib.SMTP_SSL('smpt.gmail.com', 465, context=context) as server:
-            server.login(self.lifePulseEmail, self.lifePulsePassword)
-            server.sendmail(self.lifePulseEmail, self.otherUser, self.message)
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(self.lifePulseEmail, self.lifePulsePassword)
+        server.sendmail(self.lifePulseEmail, self.otherUser, self.message)
+        server.quit()
 
 emailToSend = sendingEmail(sys.argv[1], sys.argv[2])
-
