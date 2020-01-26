@@ -51,7 +51,7 @@ router.get('/', (req, res, next) => {
 
   python.on('message', function(message) {
     // received a message sent from the Python script (a simple "print" statement)
-    res.send(message);
+    // res.send(message);
   });
 
   // end the input stream and allow the process to exit
