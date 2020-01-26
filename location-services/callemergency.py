@@ -3,8 +3,8 @@ import gsmmodem
 import sys
 
 class messageToSend:
-    def __init__(self, sys.arg[1]):
-        self.listOfPhones = sys.arg[1]
+    def __init__(self, listOfPhones):
+        self.listOfPhones = listOfPhones
         myAddressObject = Address()
         myAddress = myAddressObject.getAddress()
         myMessage = 'I need narcan at ' + str(myAddress)
@@ -13,3 +13,5 @@ class messageToSend:
     def sendingSMS(self, listPhones):
         for phones in listPhones:
             gsmmodem.sendSms(destination=phones, text=myMessage)
+
+emergency = messageToSend(sys.arg[1])
