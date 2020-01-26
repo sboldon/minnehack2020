@@ -5,7 +5,7 @@ require('dotenv').config();
 const testAPIRouter = require('./routes/test-api');
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5005;
 
 app.use(express.json()); // essentially bodyParser
 
