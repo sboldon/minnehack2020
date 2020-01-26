@@ -3,11 +3,12 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+
 class Address:
     def __init__(self):
-        self.key = os.getenv("API_KEY") 
+        self.key = os.getenv("API_KEY")
         self.client = gm.Client(self.key)
-    
+
     def findlatlong(self):
         self.geoValue = self.client.geolocate()
         self.latitude = self.geoValue['location']['lat']
@@ -16,5 +17,6 @@ class Address:
 
     def getAddress(self):
         self.findlatlong()
-        self.myAddress = self.client.reverse_geocode((self.latitude, self.longitude)) 
+        self.myAddress = self.client.reverse_geocode(
+            (self.latitude, self.longitude))
         return self.myAddress[0]['formatted_address']

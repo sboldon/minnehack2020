@@ -3,6 +3,7 @@ const path = require('path');
 // const mongoose = require('mongoose');
 require('dotenv').config();
 const testAPIRouter = require('./routes/test-api');
+const addressRouter = require('./routes/address');
 
 const app = express();
 const port = process.env.PORT || 80;
@@ -11,6 +12,7 @@ app.use(express.json()); // essentially bodyParser
 
 // API ROUTES //
 app.use('/testAPI', testAPIRouter);
+app.use('/address', addressRouter);
 
 // PRODUCTION BUILD //
 if (process.env.NODE_ENV === 'production') {
