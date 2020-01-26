@@ -44,6 +44,7 @@ router.get('/', (req, res, next) => {
   const packageName = 'googlemaps';
   const options = {
     args: [packageName],
+    pythonPath: '/usr/local/bin/python3.7',
   };
   const python = PythonShell.run(file, options, (err, results) => {
     if (err) throw err;
