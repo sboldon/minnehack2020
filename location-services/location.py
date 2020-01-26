@@ -1,6 +1,7 @@
 import googlemaps as gm
 import os
 from dotenv import load_dotenv
+import sys
 load_dotenv()
 
 
@@ -14,4 +15,7 @@ class Address:
         self.geoValue = self.client.geolocate()
         self.latlong = (self.geoValue['location']['lat'], self.geoValue['location']['lng'])
         self.addr = self.client.reverse_geocode(self.latlong)
-        return self.addr[0]['formatted_address']
+        print(self.addr[0]['formatted_address'])
+        sys.stdout.flush()
+
+getLocate = Address()
