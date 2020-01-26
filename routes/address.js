@@ -38,8 +38,6 @@ const router = express.Router();
 // });
 
 router.get('/', (req, res, next) => {
-  res.send('ok');
-
   const file = path.join(__dirname, '../location-services/get-address.py');
   const packageName = 'googlemaps';
   const options = {
@@ -53,7 +51,7 @@ router.get('/', (req, res, next) => {
 
   python.on('message', function(message) {
     // received a message sent from the Python script (a simple "print" statement)
-    console.log(message);
+    res.send(message);
   });
 
   // end the input stream and allow the process to exit
