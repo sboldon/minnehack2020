@@ -4,7 +4,7 @@ import axios from 'axios';
 export default function TestApi() {
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axios.get('/testAPI');
+      const res = await axios.get('/address');
       console.log(res.data);
     };
     fetchData();
