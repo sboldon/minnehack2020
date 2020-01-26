@@ -12,7 +12,7 @@ app.use(express.json()); // essentially bodyParser
 // API ROUTES //
 app.use('/testAPI', testAPIRouter);
 app.use('/address', addressRouter);
-app.use('/login', loginRouter);
+// app.use('/login', loginRouter);
 
 // PRODUCTION BUILD //
 if (process.env.NODE_ENV === 'production') {
