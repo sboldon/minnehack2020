@@ -13,5 +13,4 @@ class Address:
         self.geoValue = self.client.geolocate()
         self.latlong = (self.geoValue['location']['lat'], self.geoValue['location']['lng'])
         self.addr = self.client.reverse_geocode(self.latlong)
-        print('hello')
         return self.addr[0]['formatted_address']
