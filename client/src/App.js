@@ -33,6 +33,15 @@ export default class App extends Component {
     )
   }
 
+  LoggedIn() {
+    return(
+      <Switch>
+        <Route path="/" exact component={Maps} />
+        <Route path="*" component={Error404} />
+      </Switch>
+    )
+  }
+
   render() {
     return (
       <Router>
@@ -45,9 +54,4 @@ export default class App extends Component {
 
 }
 
-const LoggedIn = () => (
-  <Switch>
-    <Route path="/" exact component={Maps} />
-    <Route path="*" component={Error404} />
-  </Switch>
-)
+
