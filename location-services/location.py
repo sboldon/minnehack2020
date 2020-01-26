@@ -15,5 +15,3 @@ class Address:
         self.addr = self.client.reverse_geocode(self.latlong)
         print('hello')
         return self.addr[0]['formatted_address']
-
-addr = Address()
