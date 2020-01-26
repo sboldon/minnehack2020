@@ -16,4 +16,3 @@ class sendingEmail:
             server.sendmail(self.lifePulseEmail, self.otherUser, self.message)
 
 emailToSend = sendingEmail(sys.argv[1], sys.argv[2])
-
