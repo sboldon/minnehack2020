@@ -21,6 +21,23 @@ export default class App extends Component {
 
   handleSuccess(login) {
     this.setState({success: login});
+    base.auth().onAuthStateChanged(user => {
+      console.log(user);
+      if (user) {
+        console.log(user);
+        this.setState({uid: user.id})
+        localStorage.setItem('user', user.id)
+        postUser(uid);
+      }
+      else {
+        this.setState({uid: null})
+        localStorage.removeItem('user');
+      }
+      console.log(localStorage);
+    })
+  }
+
+  componentDidUpdate() {
   }
 
   LoggedOut() {
