@@ -13,6 +13,7 @@ loc2 = sys.argv[2]
 def checkIfClose(lo1, lo2):
     distanceMatrix = gmaps.distance_matrix(lo1,lo2)['rows'][0]['elements'][0]
     if distanceMatrix['distance']['value'] <= 1600:
-        return True
+        print(True)
+        sys.stdout.flush()
 
 checkIfClose(loc1, loc2)
