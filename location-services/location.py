@@ -20,3 +20,11 @@ class Address:
         self.myAddress = self.client.reverse_geocode(
             (self.latitude, self.longitude))
         return self.myAddress[0]['formatted_address']
+        self.getAddress()
+
+    def getAddress(self):
+        self.geoValue = self.client.geolocate()
+        self.latlong = (self.geoValue['location']
+                        ['lat'], self.geoValue['location']['lng'])
+        self.addr = self.client.reverse_geocode(self.latlong)
+        return self.addr[0]['formatted_address']
