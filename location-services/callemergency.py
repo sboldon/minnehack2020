@@ -1,5 +1,5 @@
 from location import Address
-import gsmmodem
+from gsmmodem.modem import GsmModem
 import sys
 
 class messageToSend:
