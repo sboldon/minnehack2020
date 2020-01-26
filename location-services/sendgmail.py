@@ -1,4 +1,4 @@
-import smtplib, ssl
+import smtplib, ssl, sys
 
 class sendingEmail:
     def __init__(self, otherUser, address):
@@ -15,4 +15,5 @@ class sendingEmail:
             server.login(self.lifePulseEmail, self.lifePulsePassword)
             server.sendmail(self.lifePulseEmail, self.otherUser, self.message)
 
+emailToSend = sendingEmail(sys.argv[1], sys.argv[2])
 
