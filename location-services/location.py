@@ -7,13 +7,14 @@ class Address:
     def __init__(self):
         self.key = os.getenv("API_KEY") 
         self.client = gm.Client(self.key)
-        self.findlatlong()
     
     def findlatlong(self):
         self.geoValue = self.client.geolocate()
-        #self.lat = self.geoValue['location']['lat']
-        #self.lng = self.geoValue['location']['lng']
+        self.latitude = self.geoValue['location']['lat']
+        self.longitude = self.geoValue['location']['lng']
+        return (self.latitude, self.longitude)
 
     def getAddress(self):
-        self.myAddress = self.client.reverse_geocode((self.lat, self.lng))
-        return self.myAddress
+        self.findlatlong()
+        self.myAddress = self.client.reverse_geocode((self.latitude, self.longitude)) 
+        return self.myAddress[0]['formatted_address']
