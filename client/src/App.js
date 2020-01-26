@@ -9,7 +9,7 @@ export default function App() {
     <Router>
       <div className="app-container">
         <Switch>
-          <Route path="/" exact component={Maps} />
+          <Route path="/" exact component={TestApi} />
           <Route path="*" component={Error404} />
         </Switch>
       </div>
