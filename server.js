@@ -25,3 +25,12 @@ if (process.env.NODE_ENV === 'production') {
 app.listen(port, () => {
   console.log(`server running on port: ${port}`);
 });
+
+var admin = require("firebase-admin");
+
+var serviceAccount = require("path/to/serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://notional-plate-266304.firebaseio.com"
+});
