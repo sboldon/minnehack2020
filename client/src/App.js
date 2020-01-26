@@ -46,7 +46,7 @@ export default class App extends Component {
     return (
       <Router>
         <div className="app-container">
-            {this.state.success ? <LoggedIn /> : this.LoggedOut()}
+            {this.state.success ? this.LoggedIn() : this.LoggedOut()}
         </div>
       </Router>
     );
