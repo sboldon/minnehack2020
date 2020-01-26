@@ -18,7 +18,7 @@ export default function Login(props) {
     e.preventDefault();
     base.auth().signInWithEmailAndPassword(account.email, account.password).then((u)=>{
       props.handleSuccess(true);
-      setAccount(blankFormContent);
+      //setAccount(blankFormContent);
     }).catch((error) => {
         console.log(error);
       });
@@ -30,7 +30,7 @@ export default function Login(props) {
     e.preventDefault();
     base.auth().createUserWithEmailAndPassword(account.email, account.password).then((u)=>{
       props.handleSuccess(true);
-      setAccount(blankFormContent);
+      //setAccount(blankFormContent);
     }).then((u)=>{console.log(u)})
     .catch((error) => {
         console.log(error);
