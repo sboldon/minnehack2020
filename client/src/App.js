@@ -1,10 +1,19 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import { createGlobalStyle } from 'styled-components';
 import base from './models/base';
-import Error404 from './pages/Error404';
-import Maps from './pages/Map';
-import Login from './pages/Login';
-import AuthRequired from './pages/AuthRequired';
+import SignInPage from './pages/SignInPage';
+import EmergencyPage from './pages/EmergencyPage';
+import Error404Page from './pages/Error404Page';
+import AuthRequiredPage from './pages/AuthRequiredPage';
+
+const Theme = createGlobalStyle`
+  html,body {
+    margin: 0;
+    padding: 0;
+  }
+
+`
 
 export default class App extends Component {
   constructor(props) {
@@ -34,20 +43,14 @@ export default class App extends Component {
     this.checkUserStatus();
   }
 
-  // handleSuccess(login) {
-  //  this.setState({success: login});
-  //}
-
   LoggedOut() {
     return (
       <Switch>
         <Route
           path="/"
-          render={props => (
-            <Login {...props} handleSuccess={this.handleSuccess} />
-          )}
+          component={SignInPage}
         />
-        <Route path="*" component={AuthRequired} />
+        <Route path="*" component={AuthRequiredPage} />
       </Switch>
     );
   }
@@ -55,8 +58,8 @@ export default class App extends Component {
   LoggedIn() {
     return (
       <Switch>
-        <Route path="/" exact component={Maps} />
-        <Route path="*" component={Error404} />
+        <Route path="/" exact component={EmergencyPage} />
+        <Route path="*" component={Error404Page} />
       </Switch>
     );
   }
@@ -64,6 +67,7 @@ export default class App extends Component {
   render() {
     return (
       <Router>
+        <Theme />
         <div className="app-container">
           {this.state.success ? this.LoggedIn() : this.LoggedOut()}
         </div>

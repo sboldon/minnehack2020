@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function AuthRequired() {
+export default function AuthRequiredPage() {
   return (
     <div>
       <h1>Authorized Required</h1>

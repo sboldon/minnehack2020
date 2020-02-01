@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import base from '../models/base';
 
-export default function Login(props) {
+export default function SignInPage() {
   const blankFormContent = {
     email: '',
     password: '',
@@ -18,9 +18,6 @@ export default function Login(props) {
     base
       .auth()
       .signInWithEmailAndPassword(account.email, account.password)
-      .then(() => {
-        props.handleSuccess(true);
-      })
       .catch(error => {
         console.log(error);
       });
@@ -32,13 +29,6 @@ export default function Login(props) {
     base
       .auth()
       .createUserWithEmailAndPassword(account.email, account.password)
-      .then(() => {
-        props.handleSuccess(true);
-        //setAccount(blankFormContent);
-      })
-      .then(u => {
-        console.log(u);
-      })
       .catch(error => {
         console.log(error);
       });
