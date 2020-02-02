@@ -1,19 +1,15 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import { createGlobalStyle } from 'styled-components';
 import base from './models/base';
+
 import SignInPage from './pages/SignInPage';
 import EmergencyPage from './pages/EmergencyPage';
+import InformationPage from './pages/InformationPage';
+import SettingsPage from './pages/SettingsPage';
 import Error404Page from './pages/Error404Page';
 import AuthRequiredPage from './pages/AuthRequiredPage';
-
-const Theme = createGlobalStyle`
-  html,body {
-    margin: 0;
-    padding: 0;
-  }
-
-`
+import NavBar from './components/NavBar';
+import ThemeProvider from './components/ThemeProvider'
 
 export default class App extends Component {
   constructor(props) {
@@ -33,6 +29,7 @@ export default class App extends Component {
         this.setState({success: true});
         localStorage.setItem('user', user.uid);
       } else {
+        this.setState({success: false})
         localStorage.removeItem('user');
       }
       //      console.log(localStorage);
@@ -46,10 +43,7 @@ export default class App extends Component {
   LoggedOut() {
     return (
       <Switch>
-        <Route
-          path="/"
-          component={SignInPage}
-        />
+        <Route exact path="/"component={SignInPage} />
         <Route path="*" component={AuthRequiredPage} />
       </Switch>
     );
@@ -57,17 +51,22 @@ export default class App extends Component {
 
   LoggedIn() {
     return (
+      <>
+      <NavBar />
       <Switch>
-        <Route path="/" exact component={EmergencyPage} />
-        <Route path="*" component={Error404Page} />
+        <Route exact path="/"  component={EmergencyPage} />
+        <Route exact path="/information" component={InformationPage} />
+        <Route exact path="/settings" render={(routeProps) => <SettingsPage {...routeProps}/>} />
+        <Route component={Error404Page} />
       </Switch>
+      </>
     );
   }
 
   render() {
     return (
       <Router>
-        <Theme />
+        <ThemeProvider />
         <div className="app-container">
           {this.state.success ? this.LoggedIn() : this.LoggedOut()}
         </div>
