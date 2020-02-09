@@ -1,4 +1,5 @@
 import smtplib, ssl, sys
+
 def sendGmail(otherUser, address):
     message = 'I need narcan at' + str(address)
     lifePulseUser = 'lifepulseminnehack@gmail.com'

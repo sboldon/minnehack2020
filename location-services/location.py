@@ -18,3 +18,4 @@ class Address:
         self.addr = self.client.reverse_geocode(self.latlong)
         print(self.addr[0]['formatted_address'])
         sys.stdout.flush()
+

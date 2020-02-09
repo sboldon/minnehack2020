@@ -5,7 +5,7 @@ const addressRouter = require('./routes/address');
 const userRouter = require('./routes/userRouter');
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 80;
 
 app.use(express.json()); // essentially bodyParser
 
