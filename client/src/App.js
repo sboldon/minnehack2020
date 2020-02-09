@@ -1,53 +1,77 @@
 import React, {Component} from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import base from './models/base';
-import TestApi from './pages/TestApi';
-import Error404 from './pages/Error404';
-import Maps from './pages/Map';
-import Login from './pages/Login';
-import AuthRequired from './pages/AuthRequired';
 
+import SignInPage from './pages/SignInPage';
+import EmergencyPage from './pages/EmergencyPage';
+import InformationPage from './pages/InformationPage';
+import SettingsPage from './pages/SettingsPage';
+import Error404Page from './pages/Error404Page';
+import AuthRequiredPage from './pages/AuthRequiredPage';
+import NavBar from './components/NavBar';
+import ThemeProvider from './components/ThemeProvider'
 
 export default class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       success: false,
-      account: {}
-    }
-    this.handleSuccess = this.handleSuccess.bind(this);
+      account: {},
+    };
+    //    this.handleSuccess = this.handleSuccess.bind(this);
     this.LoggedOut = this.LoggedOut.bind(this);
+    this.checkUserStatus = this.checkUserStatus.bind(this);
   }
 
-  handleSuccess(login) {
-    this.setState({success: login});
+  checkUserStatus() {
+    base.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({success: true});
+        localStorage.setItem('user', user.uid);
+      } else {
+        this.setState({success: false})
+        localStorage.removeItem('user');
+      }
+      //      console.log(localStorage);
+    });
+  }
+
+  componentDidMount() {
+    this.checkUserStatus();
   }
 
   LoggedOut() {
     return (
       <Switch>
-        {/* <Route path="/" exact component={Login} handleSuccess={this.handleSuccess} /> */}
-        <Route path="/" render={props => <Login {...props} handleSuccess={this.handleSuccess} />} />
-        <Route path="*" component={AuthRequired} />
+        <Route exact path="/"component={SignInPage} />
+        <Route path="*" component={AuthRequiredPage} />
       </Switch>
-    )
+    );
+  }
+
+  LoggedIn() {
+    return (
+      <>
+      <NavBar />
+      <Switch>
+        <Route exact path="/"  component={EmergencyPage} />
+        <Route path="/information" component={InformationPage} />
+        <Route path="/settings" render={(routeProps) => <SettingsPage {...routeProps}/>} />
+        <Route component={Error404Page} />
+      </Switch>
+      </>
+    );
   }
 
   render() {
     return (
       <Router>
+        <ThemeProvider />
         <div className="app-container">
-            {this.state.success ? <LoggedIn /> : this.LoggedOut()}
+          {this.state.success ? this.LoggedIn() : this.LoggedOut()}
         </div>
       </Router>
     );
   }
-
 }
 
-const LoggedIn = () => (
-  <Switch>
-    <Route path="/" exact component={Maps} />
-    <Route path="*" component={Error404} />
-  </Switch>
-)
