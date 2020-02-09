@@ -55,8 +55,8 @@ export default class App extends Component {
       <NavBar />
       <Switch>
         <Route exact path="/"  component={EmergencyPage} />
-        <Route exact path="/information" component={InformationPage} />
-        <Route exact path="/settings" render={(routeProps) => <SettingsPage {...routeProps}/>} />
+        <Route path="/information" component={InformationPage} />
+        <Route path="/settings" render={(routeProps) => <SettingsPage {...routeProps}/>} />
         <Route component={Error404Page} />
       </Switch>
       </>

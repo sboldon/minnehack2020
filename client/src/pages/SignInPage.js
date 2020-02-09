@@ -11,7 +11,7 @@ export default function SignInPage() {
     <PageContainer>
       <Options>
         <Button color="#9BCCCB">
-          <h1>LifePulse-o</h1>
+          <h1>LifePulse</h1>
           <MaterialIcon><InfoRounded /></MaterialIcon>
         </Button>
         <Button color="#E36B5D">
