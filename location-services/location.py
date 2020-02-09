@@ -13,9 +13,8 @@ class Address:
 
     def getAddress(self):
         self.geoValue = self.client.geolocate()
-        self.latlong = (self.geoValue['location']['lat'], self.geoValue['location']['lng'])
+        self.latlong = (self.geoValue['location']
+                        ['lat'], self.geoValue['location']['lng'])
         self.addr = self.client.reverse_geocode(self.latlong)
         print(self.addr[0]['formatted_address'])
         sys.stdout.flush()
-
-getLocate = Address()
