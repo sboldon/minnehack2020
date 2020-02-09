@@ -44,7 +44,8 @@ export default class App extends Component {
     return (
       <Switch>
         <Route exact path="/"component={SignInPage} />
-        <Route path="*" component={AuthRequiredPage} />
+        <Route path="/settings" component={AuthRequiredPage} />
+        <Route path="*" component={Error404Page} />
       </Switch>
     );
   }
