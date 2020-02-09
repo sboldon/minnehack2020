@@ -1,6 +1,5 @@
 import React from 'react';
-import base from '../models/base';
-import {Link} from 'react-router-dom'
+import { base } from '../models/config';
 import Button from '@material-ui/core/Button';
 
 const signOut = async(history) => {

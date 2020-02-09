@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import base from './models/base';
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { base } from './models/config';
 
 import SignInPage from './pages/SignInPage';
 import EmergencyPage from './pages/EmergencyPage';

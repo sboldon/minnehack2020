@@ -14,6 +14,7 @@ client/build
 # misc
 *.env*
 .DS_Store
+**/config.js
 **/__pycache__/
 
 npm-debug.log*

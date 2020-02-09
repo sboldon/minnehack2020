@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import base from '../models/base';
+import { base } from '../models/config';
 
 export default function LoginForm() {
   const blankFormContent = {
