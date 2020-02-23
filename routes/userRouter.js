@@ -19,22 +19,33 @@ const router = express.Router();
 // updates db with user's coordinates
 router.post('/update-location', (req, res) => {
   const hash = geohash.encode(req.body.location.lat, req.body.location.lng);
-  console.log(hash);
-  const loc = geohash.decode(hash);
-  console.log(loc.latitude, loc.longitude);
-
   db.collection('users')
     .doc(req.body.uid)
-    .set(req.body.location);
+    .set({ location: hash });
 
   res.send('location updated');
 });
 
-// router.get('/nearby-users', (req, res) => {
-//   const { maxLat, minLat, maxLng, minLng } = getBoundingBox(req.body.location);
+router.get('/nearby-users', (req, res) => {
+  const { minLat, minLng, maxLat, maxLng } = getBoundingBox(
+    JSON.parse(req.query.location)
+  );
 
-//   db.collection('users').where;
-// });
+  const lowerLim = geohash.encode(minLat, minLng);
+  const upperLim = geohash.encode(maxLat, maxLng);
+
+  db.collection('users')
+    .where('location', '>=', lowerLim)
+    .where('location', '<=', upperLim)
+    .onSnapshot(snap => {
+      snap.forEach(doc => {
+        console.log(doc.id, doc.data());
+      });
+    });
+
+  // console.log(lowerLim, upperLim);
+  // console.log(minLat, minLng, maxLat, maxLng);
+});
 
 function rad2deg(rad) {
   return rad * (180 / Math.PI);
@@ -55,10 +66,10 @@ function getBoundingBox({ lat, lng }) {
     lng - rad2deg(Math.asin(radius / earthRad) / Math.cos(deg2rad(lat)));
 
   return {
-    maxLat,
     minLat,
-    maxLng,
     minLng,
+    maxLat,
+    maxLng,
   };
 }
 
