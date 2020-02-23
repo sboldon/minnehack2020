@@ -26,6 +26,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "firebase-admin": "^8.9.2",
+    "ngeohash": "^0.6.3",
     "python-shell": "^1.0.8"
   },
   "devDependencies": {
