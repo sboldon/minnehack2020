@@ -15,10 +15,10 @@ With LifePulse, local communities are able to establish a network that could sav
 * Account creation
 * Real-time location tracking
 * Link users to their to location
+* Retrieve nearby users within 1mi radius
 
 ### In Progess:
 
-* Retrieve nearby users within 1mi radius
 * Websocket communication between users
 * Contact emergency services on pulse
 * Find shortest path from user to person in need
