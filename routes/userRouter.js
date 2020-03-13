@@ -1,6 +1,8 @@
 const express = require('express');
+const WebSocket = require('ws');
 const admin = require('firebase-admin');
 const geohash = require('ngeohash');
+const getBoundingBox = require('../location-services/proximity_helpers');
 require('dotenv').config();
 
 admin.initializeApp({
@@ -16,7 +18,7 @@ admin.initializeApp({
 const db = admin.firestore();
 const router = express.Router();
 
-// updates db with user's coordinates
+// updates db with user's coordinates as a geohashed string
 router.post('/update-location', (req, res) => {
   const hash = geohash.encode(req.body.location.lat, req.body.location.lng);
   db.collection('users')
@@ -27,6 +29,12 @@ router.post('/update-location', (req, res) => {
 });
 
 router.get('/nearby-users', (req, res) => {
+  const ws = new WebSocket('ws://localhost:5000');
+
+  ws.on('message', data => {
+    console.log('client recieved %s', data);
+  });
+
   const { minLat, minLng, maxLat, maxLng } = getBoundingBox(
     JSON.parse(req.query.location)
   );
@@ -34,45 +42,20 @@ router.get('/nearby-users', (req, res) => {
   const lowerLim = geohash.encode(minLat, minLng);
   const upperLim = geohash.encode(maxLat, maxLng);
 
-  // console.log(lowerLim, upperLim);
-
   db.collection('users')
     .where('location', '>=', lowerLim)
     .where('location', '<=', upperLim)
     .onSnapshot(snap => {
       snap.forEach(doc => {
         console.log(doc.id, doc.data());
+        const msg = {
+          newUser: false,
+          toUser: doc.id,
+          location: doc.data(),
+        };
+        ws.send(JSON.stringify(msg));
       });
     });
-
-  // console.log(lowerLim, upperLim);
-  // console.log(minLat, minLng, maxLat, maxLng);
 });
-
-function rad2deg(rad) {
-  return rad * (180 / Math.PI);
-}
-
-function deg2rad(deg) {
-  return deg * (Math.PI / 180);
-}
-
-function getBoundingBox({ lat, lng }) {
-  const radius = 1.60934;
-  const earthRad = 6371;
-  const maxLat = lat + rad2deg(radius / earthRad);
-  const minLat = lat - rad2deg(radius / earthRad);
-  const maxLng =
-    lng + rad2deg(Math.asin(radius / earthRad) / Math.cos(deg2rad(lat)));
-  const minLng =
-    lng - rad2deg(Math.asin(radius / earthRad) / Math.cos(deg2rad(lat)));
-
-  return {
-    minLat,
-    minLng,
-    maxLat,
-    maxLng,
-  };
-}
 
 module.exports = router;

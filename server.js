@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const WebSocket = require('ws');
 const testAPIRouter = require('./routes/test-api');
 const addressRouter = require('./routes/address');
 const userRouter = require('./routes/userRouter');
@@ -22,6 +23,25 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.listen(port, () => {
-  console.log(`server running on port: ${port}`);
+const httpServer = app.listen(port, () => {
+  console.log(`http server running on port: ${port}`);
+});
+
+const wss = new WebSocket.Server({ server: httpServer, clientTracking: true });
+const users = {};
+
+wss.clients.add();
+
+wss.on('connection', ws => {
+  ws.on('message', data => {
+    const msg = JSON.parse(data);
+    if (msg.newUser) {
+      users[msg.uid] = ws;
+    } else {
+      users[msg.toUser].send('your help is needed sir');
+    }
+    console.log('server received %s', msg);
+  });
+
+  ws.send('server reply');
 });

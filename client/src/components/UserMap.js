@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Websocket from 'react-websocket';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -18,17 +19,7 @@ export class UserMap extends Component {
     this.postLocation = this.postLocation.bind(this);
     this.getLocation = this.getLocation.bind(this);
     this.getNearby = this.getNearby.bind(this);
-  }
-
-  async postLocation() {
-    const res = await axios.post('user/update-location', {
-      uid: this.uid,
-      location: {
-        lat: this.state.lat,
-        lng: this.state.lng,
-      }
-    });
-    console.log(res.data);
+    this.onOpen = this.onOpen.bind(this);
   }
 
   getLocation() {
@@ -49,32 +40,45 @@ export class UserMap extends Component {
     );
   }
 
+  async postLocation() {
+    const res = await axios.post('user/update-location', {
+      uid: this.uid,
+      location: {
+        lat: this.state.lat,
+        lng: this.state.lng,
+      }
+    });
+    console.log(res.data);
+  }
+
   async getNearby() {
     const res = await axios.get('/user/nearby-users', {
       params: {
         location: {lat: this.state.lat, lng:  this.state.lng}
       }
     })
-    // const boundingBox = res.data;
-    // console.log(boundingBox)
-    // let bottomRight = (
-    //   <Marker
-    //     key={1}
-    //     position={{lat: boundingBox.minLat, lng: boundingBox.maxLng }}
-    //   />
-    // )
-    // let topLeft = (
-    //   <Marker
-    //     key={2}
-    //     position={{lat: boundingBox.maxLat, lng: boundingBox.minLng }}
-    //   />
-    // )
-    // this.setState({
-    //   nearby: [...this.state.nearby, bottomRight, topLeft]
-    // })
   }
 
+  onMsg(data) {
+    console.log('user received %s', data);
+  }
 
+  onOpen() {
+    console.log("ws connected");
+    const msg = {
+      newUser: true,
+      uid: this.uid
+    };
+    this.send(JSON.stringify(msg));
+  }
+
+  onClose() {
+    console.log("ws disconnected");
+  }
+
+  send(msg) {
+    this.refSend.sendMessage(msg);
+  }
 
   componentDidMount() {
     this.getLocation();
@@ -92,6 +96,17 @@ export class UserMap extends Component {
   render() {
     return (
       <>
+        <Websocket 
+          url='ws://localhost:5000'
+          onMessage={this.onMsg}
+          onOpen={this.onOpen}
+          onClose={this.onClose}
+          reconnect={true}
+          debug={true}
+          ref={Websocket => {
+            this.refSend = Websocket;
+          }}
+        />
         <ControlBox>
           <button onClick={this.getNearby}>
             <p>Find Nearby Users</p>
