@@ -20,6 +20,8 @@ export class UserMap extends Component {
     this.getLocation = this.getLocation.bind(this);
     this.getNearby = this.getNearby.bind(this);
     this.onOpen = this.onOpen.bind(this);
+
+    this.wss = process.env.NODE_ENV === 'production' ? 'wss://lifepulseminnehack2020.herokuapp.com' : 'ws://localhost:5000'
   }
 
   getLocation() {
@@ -98,7 +100,7 @@ export class UserMap extends Component {
     return (
       <>
         <Websocket 
-          url='ws://localhost:5000'
+          url={this.wss}
           onMessage={this.onMsg}
           onOpen={this.onOpen}
           onClose={this.onClose}
