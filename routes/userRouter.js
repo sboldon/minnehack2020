@@ -50,6 +50,7 @@ router.get('/nearby-users', (req, res) => {
         console.log(doc.id, doc.data());
         const msg = {
           newUser: false,
+          fromUser: req.query.uid,
           toUser: doc.id,
           location: doc.data(),
         };

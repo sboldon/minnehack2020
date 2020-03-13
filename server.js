@@ -38,7 +38,7 @@ wss.on('connection', ws => {
     if (msg.newUser) {
       users[msg.uid] = ws;
     } else {
-      users[msg.toUser].send('your help is needed sir');
+      users[msg.toUser].send(`${msg.fromUser} is requesting your help`);
     }
     console.log('server received %s', msg);
   });

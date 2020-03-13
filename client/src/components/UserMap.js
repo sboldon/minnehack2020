@@ -52,15 +52,16 @@ export class UserMap extends Component {
   }
 
   async getNearby() {
-    const res = await axios.get('/user/nearby-users', {
+    const res = await axios.get('user/nearby-users', {
       params: {
-        location: {lat: this.state.lat, lng:  this.state.lng}
+        location: {lat: this.state.lat, lng:  this.state.lng},
+        uid: this.uid,
       }
     })
   }
 
   onMsg(data) {
-    console.log('user received %s', data);
+    console.log("you've got mail : %s", data);
   }
 
   onOpen() {
