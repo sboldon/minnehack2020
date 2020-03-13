@@ -34,6 +34,8 @@ router.get('/nearby-users', (req, res) => {
   const lowerLim = geohash.encode(minLat, minLng);
   const upperLim = geohash.encode(maxLat, maxLng);
 
+  // console.log(lowerLim, upperLim);
+
   db.collection('users')
     .where('location', '>=', lowerLim)
     .where('location', '<=', upperLim)
