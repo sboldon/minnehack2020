@@ -21,7 +21,7 @@ export class UserMap extends Component {
     this.getNearby = this.getNearby.bind(this);
     this.onOpen = this.onOpen.bind(this);
 
-    this.wss = process.env.NODE_ENV === 'production' ? 'wss://lifepulseminnehack2020.herokuapp.com' : 'ws://localhost:5000'
+    this.wss = process.env.NODE_ENV === 'production' ? 'ws://lifepulseminnehack2020.herokuapp.com' : 'ws://localhost:5000'
   }
 
   getLocation() {
