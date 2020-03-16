@@ -27,8 +27,8 @@ export default class App extends Component {
   async registerUser(uid) {
     const res = await axios.post(`/users/${uid}`);
     console.log(res);
-    this.setState({success: true});
     localStorage.setItem('user', uid);
+    this.setState({success: true});
   }
 
   checkUserStatus() {
