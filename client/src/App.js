@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import axios from 'axios';
 import { base } from './models/config';
 
 import SignInPage from './pages/SignInPage';
@@ -23,16 +24,21 @@ export default class App extends Component {
     this.checkUserStatus = this.checkUserStatus.bind(this);
   }
 
+  async registerUser(uid) {
+    const res = await axios.post(`/users/${uid}`);
+    console.log(res);
+    this.setState({success: true});
+    localStorage.setItem('user', uid);
+  }
+
   checkUserStatus() {
     base.auth().onAuthStateChanged(user => {
       if (user) {
-        this.setState({success: true});
-        localStorage.setItem('user', user.uid);
+        this.registerUser(user.uid)
       } else {
         this.setState({success: false})
         localStorage.removeItem('user');
       }
-      //      console.log(localStorage);
     });
   }
 

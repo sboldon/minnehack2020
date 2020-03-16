@@ -3,17 +3,17 @@ const path = require('path');
 const WebSocket = require('ws');
 const testAPIRouter = require('./routes/test-api');
 const addressRouter = require('./routes/address');
-const userRouter = require('./routes/userRouter');
+const usersRouter = require('./routes/usersRouter');
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(express.json()); // essentially bodyParser
+app.use(express.json()); // parse req.body JSON
 
 // API ROUTES //
 app.use('/testAPI', testAPIRouter);
 app.use('/address', addressRouter);
-app.use('/user', userRouter);
+app.use('/users', usersRouter);
 
 // PRODUCTION BUILD //
 if (process.env.NODE_ENV === 'production') {
@@ -30,17 +30,11 @@ const httpServer = app.listen(port, () => {
 const wss = new WebSocket.Server({ server: httpServer, clientTracking: true });
 const users = {};
 
-wss.clients.add();
-
 wss.on('connection', ws => {
   ws.on('message', data => {
     const msg = JSON.parse(data);
-    if (msg.newUser) {
-      users[msg.uid] = ws;
-    } else {
-      users[msg.toUser].send(`${msg.fromUser} is requesting your help`);
-    }
-    console.log('server received %s', msg);
+
+    console.log(`server received :: ${data} `);
   });
 
   ws.send('server reply');

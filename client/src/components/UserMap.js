@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Websocket from 'react-websocket';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -15,25 +14,25 @@ export class UserMap extends Component {
       zoom: 14,
       nearby: []
     };
-    this.uid = localStorage.getItem('user');
-    this.postLocation = this.postLocation.bind(this);
-    this.getLocation = this.getLocation.bind(this);
-    this.getNearby = this.getNearby.bind(this);
-    this.onOpen = this.onOpen.bind(this);
-
-    this.wss = process.env.NODE_ENV === 'production' ? 'ws://lifepulseminnehack2020.herokuapp.com' : 'ws://localhost:5000'
+    this.watchId = 0;
+    this.uid = this.props.uid;
+    this.storeLocation = this.storeLocation.bind(this);
+    this.contactNearby = this.contactNearby.bind(this);
   }
 
-  getLocation() {
-    navigator.geolocation.getCurrentPosition(
+
+  // set lat/lng state from current location
+  getLocation = () => {
+    this.watchId = navigator.geolocation.watchPosition(
       position => {
-        this.setState({
+        console.log('watchPosition fired');
+         // on success
+        this.setState({ // db update on location change
           lat: position.coords.latitude,
           lng: position.coords.longitude,
           zoom: 15,
-        }); // on success
+        }, () => this.storeLocation());
       },
-      // on nav fail
       e => {
         console.log(e);
       },
@@ -42,9 +41,9 @@ export class UserMap extends Component {
     );
   }
 
-  async postLocation() {
-    const res = await axios.post('user/update-location', {
-      uid: this.uid,
+  // update location associated with uid in db
+  async storeLocation() {
+    const res = await axios.put(`/users/${this.uid}/location`, {
       location: {
         lat: this.state.lat,
         lng: this.state.lng,
@@ -53,76 +52,39 @@ export class UserMap extends Component {
     console.log(res.data);
   }
 
-  async getNearby() {
-    const res = await axios.get('user/nearby-users', {
-      params: {
-        location: {lat: this.state.lat, lng:  this.state.lng},
-        uid: this.uid,
+  async contactNearby() {
+    this.props.togglePulse();
+    const res = await axios.post(`/users/${this.uid}/emergency`, {
+      location: {
+        lat: this.state.lat,
+        lng: this.state.lng,
       }
-    })
-  }
-
-  onMsg(data) {
-    console.log("you've got mail : %s", data);
-  }
-
-  onOpen() {
-    console.log("ws connected");
-    const msg = {
-      newUser: true,
-      uid: this.uid
-    };
-    this.send(JSON.stringify(msg));
-  }
-
-  onClose() {
-    console.log("ws disconnected");
-  }
-
-  send(msg) {
-    this.refSend.sendMessage(msg);
+    });
+    const { minLat, minLng, maxLat, maxLng } = res.data;
+    console.log('minLat: %s, minLng: %s, maxLat: %s, maxLng: %s', minLat, minLng, maxLat, maxLng);
   }
 
   componentDidMount() {
     this.getLocation();
-    this.interval = setInterval(() => this.getLocation(), 10000);
-  }
-
-  componentDidUpdate() {
-    this.postLocation();
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    navigator.geolocation.clearWatch(this.watchId);
   }
 
   render() {
     return (
       <>
-        <Websocket 
-          url={this.wss}
-          onMessage={this.onMsg}
-          onOpen={this.onOpen}
-          onClose={this.onClose}
-          reconnect={true}
-          debug={true}
-          ref={Websocket => {
-            this.refSend = Websocket;
-          }}
-        />
         <ControlBox>
-          <button onClick={this.getNearby}>
-            <p>Find Nearby Users</p>
-          </button>
-          <button>
-            <p>Center Map</p> 
+          <button onClick={() => this.contactNearby()}>
+            <p>Emergency Pulse</p>
           </button>
         </ControlBox>
         <Map
           google={this.props.google}
           zoom={this.state.zoom}
           initialCenter={{lat: this.state.lat, lng: this.state.lng}}
-          centerAroundCurrentLocation
+          centerAroundCurrentLocation={true}
           styles={mapsStyle}
           style={mapContainer}
           disableDefaultUI={true}
@@ -164,7 +126,3 @@ const ControlBox = styled.div`
 export default GoogleApiWrapper({
   apiKey: config.apiKey
 })(UserMap);
-
-
-
-//   center={{lat: this.state.lat, lng: this.state.lng}}
