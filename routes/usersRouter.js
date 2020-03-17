@@ -1,24 +1,8 @@
 const express = require('express');
-const WebSocket = require('ws');
-const admin = require('firebase-admin');
 const geohash = require('ngeohash');
+const db = require('../config');
 const getBoundingBox = require('../location-services/proximity_helpers');
-require('dotenv').config();
 
-admin.initializeApp({
-  credential: admin.credential.cert({
-    type: 'service_account',
-    projectId: process.env.PROJECT_ID,
-    clientEmail: process.env.CLIENT_EMAIL,
-    privateKey:
-      process.env.NODE_ENV === 'production'
-        ? JSON.parse(process.env.PRIVATE_KEY)
-        : process.env.PRIVATE_KEY,
-  }),
-  databaseURL: process.env.DB_URL,
-});
-
-const db = admin.firestore();
 const router = express.Router();
 
 // create document for new user in db
