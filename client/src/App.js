@@ -10,7 +10,20 @@ import SettingsPage from './pages/SettingsPage';
 import Error404Page from './pages/Error404Page';
 import AuthRequiredPage from './pages/AuthRequiredPage';
 import NavBar from './components/NavBar';
-import ThemeProvider from './components/ThemeProvider'
+import ThemeProvider from './components/ThemeProvider';
+import KeepAlive from './components/KeepAlive';
+
+// const EmergencyPageWrapper = () => (
+//   <KeepAlive visibile={false}>
+//     <Route exact path="/"  component={EmergencyPage} />
+//   </KeepAlive>
+// )
+
+const EmergencyPageWrapper = () => (
+  <KeepAlive visibile={true}>
+    <EmergencyPage />
+  </KeepAlive>
+)
 
 export default class App extends Component {
   constructor(props) {
@@ -60,8 +73,8 @@ export default class App extends Component {
     return (
       <>
       <NavBar />
+      <EmergencyPageWrapper />
       <Switch>
-        <Route exact path="/"  component={EmergencyPage} />
         <Route path="/information" component={InformationPage} />
         <Route path="/settings" render={(routeProps) => <SettingsPage {...routeProps}/>} />
         <Route component={Error404Page} />
