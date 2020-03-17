@@ -17,17 +17,23 @@ export default function SignInPage() {
   return (
     <PageContainer>
       <Options isSignIn={isSignIn}>
-        <Button color="#9BCCCB">
+        <Button color='#9BCCCB'>
           <h1>LifePulse</h1>
-          <MaterialIcon><InfoRounded/></MaterialIcon>
+          <MaterialIcon color='#333333'>
+            <InfoRounded/>
+          </MaterialIcon>
         </Button>
-        <Button color="#E36B5D">
+        <Button color='#E36B5D'>
           <h1>Emergency</h1>
-          <MaterialIcon><LocalHospitalRounded /></MaterialIcon>
+          <MaterialIcon color='#333333'>
+            <LocalHospitalRounded />
+          </MaterialIcon>
         </Button>
-        <Button color="#B6CC9D" onClick={() => handleSignInAnimation(isSignIn, setSignInState)} >
+        <Button color='#B6CC9D' onClick={() => handleSignInAnimation(isSignIn, setSignInState)} >
           <h1>Sign In</h1>
-          <MaterialIcon><ExpandMoreRounded size="large"/></MaterialIcon>
+          <MaterialIcon color='#333333'>
+            <ExpandMoreRounded size='large'/>
+          </MaterialIcon>
         </Button>
       </Options>
       <LoginForm />
@@ -122,9 +128,10 @@ const Button = styled.div`
   color: #444444;
   border: solid 0.45px #5D5D5D;
 
+/* 
   &.sign-in {
     margin-bottom: 500px;
-  }
+  } */
 
   @media (max-height: 600px) {
     flex-direction: row;
@@ -132,7 +139,6 @@ const Button = styled.div`
 `
 
 const MaterialIcon = styled(IconBuilder)`
-  margin-left: 20px;
   margin: 0;
-  color: #333333;
+  color: ${props => props.color};
 `;
